@@ -15,13 +15,19 @@ exports.uploadVideo = async (req, res) => {
     const file = req.file;
     try {
         // Upload video to Cloudinary
-        const result = await cloudinary.uploader.upload(file.path, { resource_type: 'video' });
+        const result = await cloudinary.uploader.upload(file.path, {
+            resource_type: 'video',
+            eager: [
+                { format: 'jpg', gravity: 'auto', quality: 'auto', width: 300, height: 200, crop: 'thumb' } // Generate a thumbnail
+            ]
+        });
 
         // Create new video document in database
         const newVideo = new Video({
             title: req.body.title,
             description: req.body.description,
             url: result.secure_url,
+            thumbnailUrl: result.eager[0].secure_url, // Store the generated thumbnail URL
             user: req.user.userId,
         });
         await newVideo.save();

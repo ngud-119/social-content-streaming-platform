@@ -8,6 +8,7 @@ const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
 const videoRoutes = require('./routes/videoRoutes');
+const userRoutes = require('./routes/userRoutes');
 const socialRoutes = require('./routes/socialRoutes');
 const likeRoutes = require('./routes/likeRoutes'); // Add this line
 
@@ -28,6 +29,7 @@ mongoose.connect('mongodb://localhost:27017/content-platform', {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/videos', videoRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/social', socialRoutes);
 app.use('/api/videos', likeRoutes); // Add this line
 

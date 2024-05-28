@@ -1,6 +1,6 @@
-// frontend/src/components/Home.js
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import VideoThumbnail from './VideoThumbnail';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
@@ -20,29 +20,27 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="container mx-auto">
-            <h1 className="text-3xl font-semibold mb-8">Latest Videos</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="container mx-auto py-8">
+            <h1 className="text-3xl font-semibold mb-6">Videos</h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {videos.map((video) => (
-                    <div key={video._id} className="bg-white rounded-lg shadow-md">
+                    <div key={video._id} className="w-full">
+                        <VideoThumbnail
+                            videoUrl={video.url}
+                            thumbnailUrl={video.thumbnailUrl || 'default-thumbnail-url.jpg'}
+                            videoId={video._id}
+                            uploaderId={video.user._id}
+                            uploaderName={video.user.username}
+                        />
                         <Link to={`/video/${video._id}`}>
-                            <img
-                                src={video.thumbnail}
-                                alt={video.title}
-                                className="w-full h-48 object-cover rounded-t-lg"
-                            />
+                            <h2 className="text-xl font-semibold mt-2 text-blue-500 hover:underline">{video.title}</h2>
                         </Link>
-                        <div className="p-4">
-                            <Link to={`/video/${video._id}`} className="text-xl font-semibold">
-                                {video.title}
-                            </Link>
-                            <p className="text-gray-500">
-                                Uploaded by:{' '}
-                                <Link to={`/profile/${video.user._id}`} className="text-blue-500">
-                                    {video.user.username}
-                                </Link>
-                            </p>
-                        </div>
+                        <Link to={`/video/${video._id}`}>
+                            <p className="text-gray-500 hover:text-blue-500">{video.description}</p>
+                        </Link>
+                        {/* <p className="text-sm text-gray-400">
+                            <Link to={`/profile/${video.user._id}`} className="text-blue-500 hover:underline">{video.user.username}</Link>
+                        </p> */}
                     </div>
                 ))}
             </div>
