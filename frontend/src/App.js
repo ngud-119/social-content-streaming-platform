@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import VideoPlayer from './components/VideoPlayer';
 import UserProfile from './components/UserProfile';
+import Upload from './components/Upload'; // Import the Upload component
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
               <Route path="/register" element={<Register />} />
               <Route path="/video/:videoId" element={<VideoPlayer />} />
               <Route path="/profile/:userId" element={<UserProfile />} />
+              <Route path="/upload" element={<Upload />} /> {/* Add upload route */}
             </Routes>
           </div>
         </div>

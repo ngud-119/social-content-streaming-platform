@@ -1,52 +1,32 @@
-// frontend/src/components/Navbar.js
-
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../redux/authActions';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
-    const dispatch = useDispatch();
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    const user = useSelector((state) => state.auth.user);
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate();
 
     const handleLogout = () => {
-        dispatch(logout());
+        localStorage.removeItem('token');
+        navigate('/login');
     };
 
     return (
-        <nav className="bg-gray-800">
-            <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between h-16">
-                    <div className="flex items-center">
-                        <Link to="/" className="text-white font-semibold text-xl">
-                            Video Streaming App
-                        </Link>
-                    </div>
-                    <div className="flex items-center">
-                        {isAuthenticated ? (
-                            <>
-                                <Link to={`/profile/${user._id}`} className="text-gray-300 hover:text-white px-3 py-2">
-                                    {user.username}
-                                </Link>
-                                <button
-                                    onClick={handleLogout}
-                                    className="text-gray-300 hover:text-white px-3 py-2"
-                                >
-                                    Logout
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <Link to="/login" className="text-gray-300 hover:text-white px-3 py-2">
-                                    Login
-                                </Link>
-                                <Link to="/register" className="text-gray-300 hover:text-white px-3 py-2">
-                                    Register
-                                </Link>
-                            </>
-                        )}
-                    </div>
+        <nav className="bg-blue-500 p-4 text-white">
+            <div className="container mx-auto flex justify-between items-center">
+                <Link to="/" className="text-xl font-semibold">Content Streaming Platform</Link>
+                <div>
+                    <Link to="/" className="mr-4">Home</Link>
+                    {token ? (
+                        <>
+                            <Link to="/upload" className="mr-4">Upload Video</Link> {/* Add upload link */}
+                            <button onClick={handleLogout} className="mr-4">Logout</button>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login" className="mr-4">Login</Link>
+                            <Link to="/register" className="mr-4">Register</Link>
+                        </>
+                    )}
                 </div>
             </div>
         </nav>

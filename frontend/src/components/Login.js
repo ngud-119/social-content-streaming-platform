@@ -1,17 +1,23 @@
-// frontend/src/components/Login.js
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/authActions';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        dispatch(login(username, password));
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await dispatch(login(username, password));
+      navigate('/'); // Redirect to homepage on successful login
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
+  };
 
   return (
     <div className="max-w-md mx-auto bg-white p-8 rounded-md shadow-md">
@@ -27,6 +33,7 @@ const Login = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            required
           />
         </div>
         <div className="mb-4">
@@ -39,6 +46,7 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            required
           />
         </div>
         <button
