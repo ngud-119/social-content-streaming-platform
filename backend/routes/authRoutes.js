@@ -1,4 +1,3 @@
-// backend/routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
@@ -11,8 +10,9 @@ require('dotenv').config();
 // User registration route
 router.post('/register', async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = new User({ username, password });
+        const { username, email, password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ username, email, password: hashedPassword });
         await user.save();
         res.status(201).json({ message: 'User created' });
     } catch (error) {
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
         // Log the JWT_SECRET to ensure it's correctly loaded
         console.log('JWT_SECRET:', process.env.JWT_SECRET);
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token, user: { _id: user._id, username: user.username } });
     } catch (error) {
         res.status(400).json({ message: error.message });
